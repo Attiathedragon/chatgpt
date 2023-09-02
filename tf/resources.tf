@@ -32,14 +32,14 @@ resource "alicloud_vswitch" "dbvs1" {
   vswitch_name="dbvs1"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.0.0/19"
-  availability_zone = data.alicloud_zones.zone.zones[0].id
-  depends_on = [alicloud_vpc.vpc]
+  zone_id           = data.alicloud_zones.zone.zones[0].id
+  depends_on        = [alicloud_vpc.vpc]
 }
 resource "alicloud_vswitch" "dbvs2" {
   vswitch_name="dbvs2"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.32.0/19"
-  availability_zone = data.alicloud_zones.zone.zones[1].id
+  zone_id = data.alicloud_zones.zone.zones[1].id
   depends_on = [alicloud_vpc.vpc]
 }
 
@@ -66,9 +66,9 @@ resource "alicloud_db_instance" "mysqldb" {
 
 
 resource "alicloud_db_account" "account" {
-  instance_id = alicloud_db_instance.mysqldb.id
-  name        = "tariq"
-  password    = "Password@1"
+  db_instance_id = alicloud_db_instance.mysqldb.id
+  account_name        = "tariq"
+  account_password    = "Password@1"
 }
 
 resource "alicloud_db_database" "db" {
@@ -103,7 +103,7 @@ resource "alicloud_vswitch" "rdeisVs1" {
   vswitch_name="rdeisVs1"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.128.0/20"
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   depends_on = [alicloud_vpc.vpc]
 }
 
@@ -153,14 +153,14 @@ resource "alicloud_vswitch" "fireWall" {
   vswitch_name = "fireWall"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.192.0/19"
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   depends_on = [alicloud_vpc.vpc]
 }
 resource "alicloud_vswitch" "dmz" {
   vswitch_name = "dmz"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.224.0/20"
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   depends_on = [alicloud_vpc.vpc]
 }
 
@@ -225,7 +225,7 @@ resource "alicloud_security_group_rule" "icmp" {
 
 resource "alicloud_instance" "fireWall" {
 
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   security_groups   = alicloud_security_group.fireWall.*.id
 
 
@@ -350,14 +350,14 @@ resource "alicloud_vswitch" "Ldap" {
  vswitch_name="ldap"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.240.0/20"
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   depends_on = [alicloud_vpc.vpc]
 }
 resource "alicloud_vswitch" "ldap-replica" {
  vswitch_name="ldap-replica"
   vpc_id            = alicloud_vpc.vpc.id
   cidr_block        = "192.168.144.0/20"
-  availability_zone = data.alicloud_zones.zone.zones[1].id
+  zone_id = data.alicloud_zones.zone.zones[1].id
   depends_on = [alicloud_vpc.vpc]
 }
 
@@ -388,7 +388,7 @@ resource "alicloud_security_group_rule" "ldap2" {
 }
 resource "alicloud_instance" "ldap" {
 
-  availability_zone = data.alicloud_zones.zone.zones[0].id
+  zone_id = data.alicloud_zones.zone.zones[0].id
   security_groups   = alicloud_security_group.ldap.*.id
 
 
@@ -405,7 +405,7 @@ resource "alicloud_instance" "ldap" {
 }
 resource "alicloud_instance" "ldap-replica" {
 
-  availability_zone = data.alicloud_zones.zone.zones[1].id
+  zone_id = data.alicloud_zones.zone.zones[1].id
   security_groups   = alicloud_security_group.ldap.*.id
 
 
@@ -528,7 +528,7 @@ resource "alicloud_vswitch" "v2" {
 #   # Create an ACK Pro cluster. 
 #   cluster_spec              = "ack.pro.small"
 #   version                   = "1.22.15-aliyun.1"
-#   # The vSwitches of the new Kubernetes cluster. Specify one or more vSwitch IDs. The vSwitches must be in the zone specified by availability_zone. 
+#   # The vSwitches of the new Kubernetes cluster. Specify one or more vSwitch IDs. The vSwitches must be in the zone specified by zone_id. 
 #   worker_vswitch_ids        = [alicloud_vswitch.v1.id,alicloud_vswitch.v2.id]
 
 #   # Specify whether to create a NAT gateway when the system creates the Kubernetes cluster. Default value: true. 
@@ -567,7 +567,7 @@ resource "alicloud_vswitch" "v2" {
 #   cluster_id            = alicloud_cs_managed_kubernetes.flannel.id
 #   # The name of the node pool. 
 #   name                  = "default-nodepool"
-#   # The vSwitches of the new Kubernetes cluster. Specify one or more vSwitch IDs. The vSwitches must be in the zone specified by availability_zone. 
+#   # The vSwitches of the new Kubernetes cluster. Specify one or more vSwitch IDs. The vSwitches must be in the zone specified by zone_id. 
 #   vswitch_ids           = [alicloud_vswitch.v1.id,alicloud_vswitch.v2.id]
 
 #   # Worker ECS Type and ChargeType
